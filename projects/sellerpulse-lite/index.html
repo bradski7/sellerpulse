@@ -3,51 +3,96 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SellerPulse Lite</title>
+    <title>SellerPulse Lite Analyzer</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main class="container">
-      <header>
-        <h1>SellerPulse Lite</h1>
-        <p>Turn listing stats into clear weekly actions.</p>
+      <header class="top-header card">
+        <div>
+          <p><a href="index.html" class="back-link">← Back to SellerPulse</a></p>
+          <h1>SellerPulse Lite Analyzer</h1>
+          <p class="muted">Turn listing stats into a clear 7-day action plan.</p>
+        </div>
+        <div class="score-pill" id="scorePill" hidden>
+          <span>Health Score</span>
+          <strong id="score">--</strong>
+        </div>
       </header>
 
-      <section class="card grid">
-        <label>Listing views <input id="views" type="number" min="0" value="500" /></label>
-        <label>Orders <input id="orders" type="number" min="0" value="15" /></label>
-        <label>Revenue ($) <input id="revenue" type="number" min="0" step="0.01" value="420" /></label>
-        <label>Ad spend ($) <input id="adSpend" type="number" min="0" step="0.01" value="80" /></label>
-        <label>Favorites <input id="favorites" type="number" min="0" value="40" /></label>
-        <label>Orders with 2+ items <input id="multiOrders" type="number" min="0" value="3" /></label>
-      </section>
-
-      <section class="card tools">
-        <h2>Quick Import / Export</h2>
-        <p class="muted">
-          CSV headers: <code>views,orders,revenue,adSpend,favorites,multiOrders</code>
-        </p>
+      <section class="card">
+        <h2>Single Listing Inputs</h2>
         <div class="actions">
-          <input id="csvFile" type="file" accept=".csv,text/csv" />
-          <button id="loadCsvBtn">Load CSV Row</button>
-          <button id="downloadCsvTemplateBtn">CSV Template</button>
+          <label class="inline-label" for="scenarioSelect">Quick scenario</label>
+          <select id="scenarioSelect">
+            <option value="">Choose preset</option>
+            <option value="weak-traffic">Weak traffic</option>
+            <option value="weak-conversion">Good traffic, weak conversion</option>
+            <option value="healthy">Healthy baseline</option>
+            <option value="ad-overspend">Ad overspend risk</option>
+          </select>
+        </div>
+
+        <div class="grid">
+          <label>Listing views <input id="views" type="number" min="0" value="500" /></label>
+          <label>Orders <input id="orders" type="number" min="0" value="15" /></label>
+          <label>Revenue ($) <input id="revenue" type="number" min="0" step="0.01" value="420" /></label>
+          <label>Ad spend ($) <input id="adSpend" type="number" min="0" step="0.01" value="80" /></label>
+          <label>Favorites <input id="favorites" type="number" min="0" value="40" /></label>
+          <label>Orders with 2+ items <input id="multiOrders" type="number" min="0" value="3" /></label>
+        </div>
+
+        <div class="actions">
+          <button id="analyzeBtn" class="primary">Analyze</button>
+          <button id="saveSnapshotBtn">Save Snapshot</button>
+          <button id="loadSnapshotBtn">Load Snapshot</button>
+          <button id="copySummaryBtn">Copy Summary</button>
+          <button id="downloadPlanBtn">Download Plan (.txt)</button>
         </div>
       </section>
 
-      <section class="actions">
-        <button id="analyzeBtn">Analyze</button>
-        <button id="downloadPlanBtn">Download Plan (.txt)</button>
+      <section class="card tools">
+        <h2>CSV Import / Export</h2>
+        <p class="muted">
+          CSV headers: <code>views,orders,revenue,adSpend,favorites,multiOrders</code>
+          (optional: <code>listing</code> or <code>sku</code>)
+        </p>
+        <div class="actions">
+          <input id="csvFile" type="file" accept=".csv,text/csv" />
+          <button id="loadCsvBtn">Load First Row</button>
+          <button id="batchAnalyzeBtn">Batch Analyze CSV</button>
+          <button id="downloadCsvTemplateBtn">CSV Template</button>
+        </div>
       </section>
 
       <section class="card" id="results" hidden>
         <h2>KPI Snapshot</h2>
         <div class="kpis" id="kpiGrid"></div>
-        <h3>Health Score: <span id="score"></span>/100</h3>
+        <p class="muted" id="summaryText"></p>
       </section>
 
       <section class="card" id="recommendations" hidden>
         <h2>Weekly Action Plan</h2>
         <ol id="actionList"></ol>
+      </section>
+
+      <section class="card" id="batchResults" hidden>
+        <h2>Batch Analysis</h2>
+        <p class="muted" id="batchSummary"></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Listing</th>
+                <th>Score</th>
+                <th>CVR</th>
+                <th>AOV</th>
+                <th>ROAS</th>
+              </tr>
+            </thead>
+            <tbody id="batchTableBody"></tbody>
+          </table>
+        </div>
       </section>
     </main>
 
