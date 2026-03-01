@@ -12,4 +12,5 @@
 ## Ongoing Project
 - Building an Etsy-based digital product business.
 - First product family: Notion templates for freelancers.
-- Goal: create product ladder (core + upsells + bundle) to increase revenue per customer.
+- Expanded catalog build started with three products: Realtor Lead Gen Script Kit, VA Client Onboarding SOP Pack, and Coach Notion Command Center.
+- Goal: create product ladder (core + upsells + bundle) to increase revenue per customer while keeping Brad's effort minimal.

@@ -20,11 +20,18 @@ Build a low-cost digital product stack on Etsy that can be mostly managed by cla
 - [x] V2 expansion strategy (chat draft complete)
 - [x] Upsell 1 listing pack (file created)
 
+### Completed Build Batch (2026-03-01)
+- [x] Realtor Lead Gen Script Kit (listing + assets + START-HERE)
+- [x] VA Client Onboarding SOP Pack (listing + assets + START-HERE)
+- [x] Coach Notion Command Center (listing + blueprint + START-HERE)
+- [x] Launch pack + upload sequence for Brad
+
 ### Next
 - [ ] Upsell 2 complete listing pack
 - [ ] Bundle listing pack + comparison chart copy
 - [ ] 30-day promo content bank (Etsy/Pinterest/social captions)
 - [ ] FAQ macros for Etsy messages
+- [ ] Thumbnail A/B copy variants for all live listings
 
 ## Metrics to Track (weekly)
 - Listing views
