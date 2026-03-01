@@ -8,6 +8,9 @@ const SCENARIOS = {
   "ad-overspend": { views: 900, orders: 14, revenue: 420, adSpend: 260, favorites: 55, multiOrders: 2 },
 };
 
+const QUERY = new URLSearchParams(window.location.search);
+
+
 function pct(n) {
   return `${(n * 100).toFixed(2)}%`;
 }
@@ -436,8 +439,9 @@ function setLiveStatus(text, cls = "muted") {
 function getConnectorConfig() {
   const base = ($("connectorBaseUrl")?.value || "http://localhost:8787").trim().replace(/\/$/, "");
   const shopId = ($("shopIdInput")?.value || "").trim();
+  const listingId = ($("listingIdInput")?.value || "").trim();
   const days = Number($("syncDaysInput")?.value || 30);
-  return { base, shopId, days };
+  return { base, shopId, listingId, days };
 }
 
 function connectEtsy() {
@@ -447,7 +451,7 @@ function connectEtsy() {
 }
 
 async function syncLiveData() {
-  const { base, shopId, days } = getConnectorConfig();
+  const { base, shopId, listingId, days } = getConnectorConfig();
   if (!shopId) {
     setLiveStatus("Enter your Etsy Shop ID first.", "bad");
     return;
@@ -463,24 +467,9 @@ async function syncLiveData() {
       throw new Error(data?.message || data?.error || `Sync failed (${res.status})`);
     }
 
-    const listingViews = Number(data?.listing_summary?.total_views_daily_tabulated || 0);
-    const listingFavorers = Number(data?.listing_summary?.total_favorers || 0);
-    const orders = Number(data?.totals?.orders || 0);
-    const revenue = Number(data?.totals?.revenue || 0);
-
-    setInputs({
-      views: listingViews,
-      orders,
-      revenue,
-      adSpend: getInputs().adSpend,
-      favorites: listingFavorers,
-      multiOrders: getInputs().multiOrders,
-    });
-
-    analyze();
-
     const rows = (data.listings || []).map((l) => ({
       listing: l.title || `Listing ${l.listing_id}`,
+      listing_id: String(l.listing_id || ""),
       views: Number(l.views || 0),
       orders: Number(l.orders_30d || 0),
       revenue: Number(l.revenue_30d || 0),
@@ -489,11 +478,44 @@ async function syncLiveData() {
       multiOrders: 0,
     }));
 
+    const listingViews = Number(data?.listing_summary?.total_views_daily_tabulated || 0);
+    const listingFavorers = Number(data?.listing_summary?.total_favorers || 0);
+    const orders = Number(data?.totals?.orders || 0);
+    const revenue = Number(data?.totals?.revenue || 0);
+
+    const targetListing = listingId ? rows.find((r) => String(r.listing_id) === String(listingId)) : null;
+
+    if (targetListing) {
+      setInputs({
+        views: targetListing.views,
+        orders: targetListing.orders,
+        revenue: targetListing.revenue,
+        adSpend: getInputs().adSpend,
+        favorites: targetListing.favorites,
+        multiOrders: getInputs().multiOrders,
+      });
+    } else {
+      setInputs({
+        views: listingViews,
+        orders,
+        revenue,
+        adSpend: getInputs().adSpend,
+        favorites: listingFavorers,
+        multiOrders: getInputs().multiOrders,
+      });
+    }
+
+    analyze();
+
     if (rows.length) {
       renderBatchFromRows(rows, "Live Etsy");
     }
 
-    setLiveStatus(`Sync complete. Loaded ${rows.length} listings from shop ${shopId}.`, "good");
+    if (targetListing) {
+      setLiveStatus(`Sync complete. Loaded listing ${targetListing.listing_id} from shop ${shopId}.`, "good");
+    } else {
+      setLiveStatus(`Sync complete. Loaded ${rows.length} listings from shop ${shopId}.`, "good");
+    }
   } catch (err) {
     setLiveStatus(`Live sync failed: ${err.message}`, "bad");
   }
@@ -503,6 +525,18 @@ function bindIfPresent(id, event, handler) {
   const el = $(id);
   if (!el) return;
   el.addEventListener(event, handler);
+}
+
+function initFromQuery() {
+  const connectorBase = QUERY.get("connector_base");
+  const shopId = QUERY.get("shop_id");
+  const listingId = QUERY.get("listing_id");
+  const days = QUERY.get("days");
+
+  if (connectorBase && $("connectorBaseUrl")) $("connectorBaseUrl").value = connectorBase;
+  if (shopId && $("shopIdInput")) $("shopIdInput").value = shopId;
+  if (listingId && $("listingIdInput")) $("listingIdInput").value = listingId;
+  if (days && $("syncDaysInput")) $("syncDaysInput").value = Number(days) || 30;
 }
 
 bindIfPresent("analyzeBtn", "click", analyze);
@@ -517,4 +551,11 @@ bindIfPresent("scenarioSelect", "change", applyScenario);
 bindIfPresent("connectEtsyBtn", "click", connectEtsy);
 bindIfPresent("syncLiveBtn", "click", syncLiveData);
 
+initFromQuery();
 analyze();
+
+if (QUERY.get("auto_sync") === "1") {
+  setTimeout(() => {
+    syncLiveData();
+  }, 250);
+}

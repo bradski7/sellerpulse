@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "SellerPulse for Etsy",
+  "version": "0.1.0",
+  "description": "Analyze Etsy listings in SellerPulse with one click.",
+  "action": {
+    "default_title": "SellerPulse",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["storage", "tabs", "activeTab"],
+  "host_permissions": [
+    "*://*.etsy.com/*",
+    "http://localhost:8787/*",
+    "https://bradski7.github.io/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://*.etsy.com/*"],
+      "js": ["content-script.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

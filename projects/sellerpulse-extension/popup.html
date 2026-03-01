@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SellerPulse</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main>
+      <h1>SellerPulse</h1>
+      <p class="muted">Etsy growth assistant</p>
+
+      <label>
+        Connector URL
+        <input id="connectorBaseUrl" type="text" placeholder="http://localhost:8787" />
+      </label>
+
+      <label>
+        Default Shop ID
+        <input id="defaultShopId" type="text" placeholder="12345678" />
+      </label>
+
+      <label>
+        Sync Days
+        <input id="defaultDays" type="number" min="7" max="365" value="30" />
+      </label>
+
+      <div class="actions">
+        <button id="saveBtn">Save</button>
+        <button id="connectBtn">Connect Etsy</button>
+        <button id="openAnalyzerBtn">Open Analyzer</button>
+        <button id="openAutoBtn" class="primary">Open + Auto Sync</button>
+      </div>
+
+      <p id="status" class="muted">Ready.</p>
+    </main>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

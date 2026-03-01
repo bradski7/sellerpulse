@@ -1,0 +1,12 @@
+# Node / JS
+node_modules/
+
+# Env / secrets
+.env
+*.env
+
+# Connector runtime data
+projects/sellerpulse-connector/data/
+
+# Local tool metadata
+.clawhub/
