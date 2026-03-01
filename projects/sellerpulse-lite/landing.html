@@ -8,11 +8,30 @@
       name="description"
       content="SellerPulse helps Etsy and digital product sellers diagnose listing performance and execute weekly growth actions."
     />
+
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SellerPulse — Grow Etsy Revenue with Data" />
+    <meta
+      property="og:description"
+      content="Diagnose listing performance and get a practical weekly growth plan in under 60 seconds."
+    />
+    <meta property="og:image" content="https://bradski7.github.io/sellerpulse/sellerpulse/assets/og-card.svg" />
+    <meta property="og:url" content="https://bradski7.github.io/sellerpulse/sellerpulse/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SellerPulse — Grow Etsy Revenue with Data" />
+    <meta
+      name="twitter:description"
+      content="Diagnose listing performance and get a practical weekly growth plan in under 60 seconds."
+    />
+    <meta name="twitter:image" content="https://bradski7.github.io/sellerpulse/sellerpulse/assets/og-card.svg" />
+
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main class="landing-shell">
       <section class="hero card glow">
+        <img src="assets/logo.svg" alt="SellerPulse" class="brand-logo" />
         <p class="eyebrow">SELLERPULSE</p>
         <h1>Turn Etsy stats into weekly revenue moves.</h1>
         <p class="lead">
@@ -22,9 +41,7 @@
 
         <div class="cta-row">
           <a class="btn primary" href="analyzer.html">Use Free Analyzer</a>
-          <a class="btn ghost" href="mailto:brr2k5@yahoo.com?subject=SellerPulse%20Pro%20Waitlist">
-            Join Pro Waitlist
-          </a>
+          <a class="btn ghost" href="#waitlist">Join Pro Waitlist</a>
         </div>
 
         <div class="chip-row">
@@ -56,17 +73,48 @@
         </div>
       </section>
 
-      <section class="card">
-        <h2>Built for practical operators</h2>
+      <section class="card" id="waitlist">
+        <h2>Get early access to SellerPulse Pro</h2>
         <p class="muted">
-          SellerPulse is for Etsy and digital product sellers who care about simple systems,
-          measurable decisions, and low-cost growth.
+          Join the waitlist for the $29 Pro pack: KPI templates, pricing/profit calculators,
+          launch calendar, and 90-day roadmap.
         </p>
-        <ul class="bullet-list">
-          <li>Use one dashboard rhythm every week</li>
-          <li>Improve the right listings first</li>
-          <li>Scale only after conversion gates are hit</li>
-        </ul>
+        <form id="waitlistForm" class="waitlist-form">
+          <label>
+            Name
+            <input id="waitlistName" type="text" placeholder="Your name" />
+          </label>
+          <label>
+            Email
+            <input id="waitlistEmail" type="email" required placeholder="you@example.com" />
+          </label>
+          <button class="btn primary" type="submit">Join Waitlist</button>
+        </form>
+        <p id="formStatus" class="form-status muted">No spam. One-click unsubscribe whenever you want.</p>
+      </section>
+
+      <section class="card">
+        <h2>What early users are saying</h2>
+        <div class="testimonial-grid">
+          <article class="quote-card">
+            <p>
+              “Finally a tool that tells me what to do next instead of dumping vanity metrics.”
+            </p>
+            <span>— Etsy digital planner seller</span>
+          </article>
+          <article class="quote-card">
+            <p>
+              “The weekly action plan format is exactly what I needed to stop random optimization.”
+            </p>
+            <span>— Template shop operator</span>
+          </article>
+          <article class="quote-card">
+            <p>
+              “Batch analysis instantly showed which listings to fix first. Big time saver.”
+            </p>
+            <span>— Small ecommerce founder</span>
+          </article>
+        </div>
       </section>
 
       <section class="card accent">
@@ -78,9 +126,7 @@
         <p><strong>Planned launch price:</strong> $29 one-time</p>
         <div class="cta-row">
           <a class="btn primary" href="analyzer.html">Try Lite First</a>
-          <a class="btn ghost" href="mailto:brr2k5@yahoo.com?subject=SellerPulse%20Pro%20Early%20Access">
-            Request Early Access
-          </a>
+          <a class="btn ghost" href="#waitlist">Request Early Access</a>
         </div>
       </section>
 
@@ -90,5 +136,8 @@
         <a href="https://github.com/bradski7/sellerpulse" target="_blank" rel="noreferrer">GitHub</a>
       </footer>
     </main>
+
+    <script src="config.js"></script>
+    <script src="landing.js"></script>
   </body>
 </html>

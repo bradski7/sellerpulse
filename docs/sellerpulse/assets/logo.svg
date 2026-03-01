@@ -1,0 +1,20 @@
+<svg width="420" height="96" viewBox="0 0 420 96" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SellerPulse logo">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="96" y2="96" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#86A4FF"/>
+      <stop offset="1" stop-color="#4DD1A8"/>
+    </linearGradient>
+    <linearGradient id="txt" x1="110" y1="20" x2="390" y2="78" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EAF0FF"/>
+      <stop offset="1" stop-color="#BFD0FF"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="96" height="96" rx="24" fill="#0F1934"/>
+  <rect x="6" y="6" width="84" height="84" rx="20" fill="url(#bg)" fill-opacity="0.14" stroke="#7C9BFF" stroke-opacity="0.45"/>
+  <path d="M20 50H34L41 36L52 62L60 44L68 50H76" stroke="url(#bg)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="20" cy="50" r="3.5" fill="#86A4FF"/>
+  <circle cx="76" cy="50" r="3.5" fill="#4DD1A8"/>
+
+  <text x="112" y="60" fill="url(#txt)" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="800" font-size="42" letter-spacing="0.2">SellerPulse</text>
+</svg>

@@ -1,0 +1,28 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SellerPulse social preview">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="40" x2="1080" y2="590" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#131F3E"/>
+      <stop offset="1" stop-color="#081021"/>
+    </linearGradient>
+    <linearGradient id="g" x1="180" y1="220" x2="1040" y2="470" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#86A4FF"/>
+      <stop offset="1" stop-color="#4DD1A8"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#050912"/>
+  <rect x="36" y="36" width="1128" height="558" rx="28" fill="url(#bg)"/>
+  <rect x="36" y="36" width="1128" height="558" rx="28" stroke="#7C9BFF" stroke-opacity="0.25"/>
+
+  <rect x="90" y="162" width="130" height="130" rx="28" fill="#0B1530"/>
+  <rect x="90" y="162" width="130" height="130" rx="28" stroke="#7C9BFF" stroke-opacity="0.55"/>
+  <path d="M116 228H136L146 210L160 248L172 220L186 228H202" stroke="url(#g)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <text x="250" y="236" fill="#EAF0FF" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="800" font-size="88">SellerPulse</text>
+  <text x="250" y="300" fill="#BFD0FF" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="500" font-size="38">Turn Etsy stats into weekly revenue moves.</text>
+
+  <rect x="250" y="350" width="700" height="70" rx="14" fill="#101B38" stroke="#4DD1A8" stroke-opacity="0.4"/>
+  <text x="280" y="395" fill="#D7E2FF" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="600" font-size="28">Free analyzer · KPI health score · Action plan in 60s</text>
+
+  <text x="90" y="540" fill="#9EB0EA" font-family="Inter, Segoe UI, Arial, sans-serif" font-weight="500" font-size="26">bradski7.github.io/sellerpulse</text>
+</svg>

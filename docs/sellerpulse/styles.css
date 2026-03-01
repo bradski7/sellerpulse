@@ -18,15 +18,19 @@
   box-sizing: border-box;
 }
 
+html,
 body {
   margin: 0;
+  min-height: 100%;
+}
+
+body {
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   color: var(--text);
   background:
     radial-gradient(1200px 600px at 20% -20%, rgba(124, 155, 255, 0.25), transparent 45%),
     radial-gradient(1000px 500px at 90% -20%, rgba(77, 209, 168, 0.18), transparent 40%),
     linear-gradient(180deg, var(--bg) 0%, #050912 100%);
-  min-height: 100vh;
 }
 
 a {
@@ -41,7 +45,7 @@ a {
 }
 
 .card {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)) , var(--card);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)), var(--card);
   border-radius: 14px;
   padding: 18px;
   margin: 14px 0;
@@ -53,6 +57,12 @@ a {
   box-shadow:
     0 0 0 1px rgba(124, 155, 255, 0.25),
     0 20px 60px rgba(65, 84, 161, 0.35);
+}
+
+.brand-logo {
+  width: min(320px, 75vw);
+  margin: 0 0 8px;
+  display: block;
 }
 
 .hero h1 {
@@ -152,6 +162,41 @@ button.primary {
 .bullet-list {
   margin-top: 10px;
   color: #d6e2ff;
+}
+
+.waitlist-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 10px;
+  align-items: end;
+  margin-top: 10px;
+}
+
+.form-status {
+  margin-top: 10px;
+}
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.quote-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.quote-card p {
+  margin-top: 0;
+  line-height: 1.5;
+}
+
+.quote-card span {
+  color: var(--muted);
+  font-size: 0.9rem;
 }
 
 .accent {
@@ -277,9 +322,11 @@ code {
 .good {
   color: var(--good);
 }
+
 .warn {
   color: var(--warn);
 }
+
 .bad {
   color: var(--bad);
 }
@@ -287,9 +334,11 @@ code {
 .good-bg {
   background: var(--good);
 }
+
 .warn-bg {
   background: var(--warn);
 }
+
 .bad-bg {
   background: var(--bad);
 }
@@ -316,6 +365,12 @@ td {
 th {
   color: #c9d6ff;
   background: rgba(255, 255, 255, 0.03);
+}
+
+@media (max-width: 840px) {
+  .waitlist-form {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 720px) {
