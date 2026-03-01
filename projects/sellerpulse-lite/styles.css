@@ -10,7 +10,9 @@
   --bad: #ff6b6b;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
@@ -25,15 +27,21 @@ body {
   padding: 24px;
 }
 
-header h1 { margin-bottom: 6px; }
-header p { color: var(--muted); margin-top: 0; }
+header h1 {
+  margin-bottom: 6px;
+}
+
+header p {
+  color: var(--muted);
+  margin-top: 0;
+}
 
 .card {
   background: var(--card);
   border-radius: 12px;
   padding: 16px;
   margin: 14px 0;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .grid {
@@ -53,7 +61,7 @@ label {
 input {
   width: 100%;
   background: #0f1528;
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--text);
   padding: 10px;
   border-radius: 8px;
@@ -69,6 +77,33 @@ button {
   cursor: pointer;
 }
 
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.actions input[type="file"] {
+  max-width: 320px;
+}
+
+.tools h2 {
+  margin-top: 0;
+  margin-bottom: 6px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+code {
+  background: #0f1528;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  padding: 2px 6px;
+}
+
 .kpis {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
@@ -79,12 +114,26 @@ button {
   background: #0f1528;
   border-radius: 10px;
   padding: 10px;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.kpi small { color: var(--muted); display: block; }
-.kpi strong { font-size: 1.15rem; }
+.kpi small {
+  color: var(--muted);
+  display: block;
+}
 
-.good { color: var(--good); }
-.warn { color: var(--warn); }
-.bad { color: var(--bad); }
+.kpi strong {
+  font-size: 1.15rem;
+}
+
+.good {
+  color: var(--good);
+}
+
+.warn {
+  color: var(--warn);
+}
+
+.bad {
+  color: var(--bad);
+}

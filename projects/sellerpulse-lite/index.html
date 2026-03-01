@@ -22,8 +22,21 @@
         <label>Orders with 2+ items <input id="multiOrders" type="number" min="0" value="3" /></label>
       </section>
 
+      <section class="card tools">
+        <h2>Quick Import / Export</h2>
+        <p class="muted">
+          CSV headers: <code>views,orders,revenue,adSpend,favorites,multiOrders</code>
+        </p>
+        <div class="actions">
+          <input id="csvFile" type="file" accept=".csv,text/csv" />
+          <button id="loadCsvBtn">Load CSV Row</button>
+          <button id="downloadCsvTemplateBtn">CSV Template</button>
+        </div>
+      </section>
+
       <section class="actions">
         <button id="analyzeBtn">Analyze</button>
+        <button id="downloadPlanBtn">Download Plan (.txt)</button>
       </section>
 
       <section class="card" id="results" hidden>

@@ -12,6 +12,9 @@ A lightweight web app for Etsy/digital-product sellers to diagnose listing perfo
 - Scores listing health
 - Gives rule-based action suggestions
 - Generates a weekly action plan you can copy/paste
+- Imports a CSV row with listing stats (`views,orders,revenue,adSpend,favorites,multiOrders`)
+- Exports a `.txt` weekly plan for easy sharing
+- Includes `landing.html` for lightweight lead capture
 
 ## Why this product
 
