@@ -33,6 +33,12 @@ Build a low-cost digital product stack on Etsy that can be mostly managed by cla
 - [ ] FAQ macros for Etsy messages
 - [ ] Thumbnail A/B copy variants for all live listings
 
+## New Autopilot Build Track (Software)
+- [x] SellerPulse Lite MVP scaffold created (`projects/sellerpulse-lite/`)
+- [ ] Add CSV batch analysis + saveable reports
+- [ ] Create landing page + lead capture
+- [ ] Ship paid Pro pack ($19-$39) + upsell flow
+
 ## Metrics to Track (weekly)
 - Listing views
 - Favorites
