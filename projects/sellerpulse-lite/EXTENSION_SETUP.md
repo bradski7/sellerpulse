@@ -34,7 +34,19 @@ npm run dev
 - Default Shop ID
 - Sync days window
 
+## 6) Package extension zip
+
+```bash
+cd projects/sellerpulse-extension
+./package-extension.sh
+```
+
+Output: `projects/sellerpulse-extension/dist/*.zip`
+
 ## Notes
 
 - Extension is UX. Real data comes from Etsy API via connector.
 - If live sync fails, verify connector is running and OAuth completed.
+- For store submission docs, see:
+  - `projects/sellerpulse-extension/PRIVACY_POLICY.md`
+  - `projects/sellerpulse-extension/STORE_LISTING.md`

@@ -1,6 +1,39 @@
 (() => {
   const ID = "sellerpulse-floating-btn";
 
+  function firstMatch(regex, text) {
+    const m = regex.exec(text || "");
+    return m?.[1] || "";
+  }
+
+  function inferShopIdFromDom() {
+    // Quick checks from HTML and script tags for numeric shop IDs.
+    const html = document.documentElement?.innerHTML || "";
+
+    const patterns = [
+      /"shop_id"\s*:\s*(\d{4,})/i,
+      /"shopId"\s*:\s*"?(\d{4,})"?/i,
+      /\/shops\/(\d{4,})\//i,
+      /shop_id=(\d{4,})/i,
+    ];
+
+    for (const p of patterns) {
+      const found = firstMatch(p, html);
+      if (found) return found;
+    }
+
+    const scripts = Array.from(document.scripts || []);
+    for (const s of scripts) {
+      const txt = s.textContent || "";
+      for (const p of patterns) {
+        const found = firstMatch(p, txt);
+        if (found) return found;
+      }
+    }
+
+    return "";
+  }
+
   function parseContext() {
     const url = new URL(window.location.href);
     const path = url.pathname;
@@ -13,6 +46,10 @@
 
     const shopQuery = url.searchParams.get("shop_id");
     if (shopQuery) shopId = shopQuery;
+
+    if (!shopId) {
+      shopId = inferShopIdFromDom();
+    }
 
     return { listingId, shopId };
   }

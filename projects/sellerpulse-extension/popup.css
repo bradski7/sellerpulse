@@ -71,3 +71,7 @@ button.primary {
 #status {
   margin-top: 10px;
 }
+
+.good { color: #4dd1a8; }
+.warn { color: #ffd166; }
+.bad { color: #ff6b6b; }

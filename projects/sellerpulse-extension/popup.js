@@ -13,6 +13,10 @@ function setStatus(text, cls = "muted") {
   el.className = cls;
 }
 
+function getConnectorBase() {
+  return ($("connectorBaseUrl")?.value || DEFAULTS.connectorBaseUrl).trim().replace(/\/$/, "");
+}
+
 function getCurrentTab() {
   return new Promise((resolve) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => resolve(tabs[0] || null));
@@ -46,19 +50,44 @@ async function loadSettings() {
   });
 }
 
-async function saveSettings() {
-  const payload = {
-    connectorBaseUrl: ($("connectorBaseUrl").value || DEFAULTS.connectorBaseUrl).trim(),
+function buildSettingsPayload() {
+  return {
+    connectorBaseUrl: getConnectorBase(),
     defaultShopId: ($("defaultShopId").value || "").trim(),
     defaultDays: Number($("defaultDays").value || 30),
   };
+}
 
-  chrome.storage.sync.set(payload, () => {
-    setStatus("Saved settings.", "good");
+function persistSettings(silent = false) {
+  const payload = buildSettingsPayload();
+  return new Promise((resolve) => {
+    chrome.storage.sync.set(payload, () => {
+      if (!silent) setStatus("Saved settings.", "good");
+      resolve(payload);
+    });
   });
 }
 
+async function saveSettings() {
+  await persistSettings(false);
+}
+
+async function checkConnectorHealth() {
+  const base = getConnectorBase();
+  try {
+    const res = await fetch(`${base}/health`);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data?.error || `HTTP ${res.status}`);
+
+    const connected = data.tokenLoaded ? "connected" : "not connected";
+    setStatus(`Connector OK · ${connected}`, data.tokenLoaded ? "good" : "warn");
+  } catch (err) {
+    setStatus(`Connector unavailable (${err.message})`, "bad");
+  }
+}
+
 async function openAnalyzer(autoSync = false) {
+  await persistSettings(true);
   const tab = await getCurrentTab();
   const ctx = parseTabContext(tab?.url || "");
 
@@ -77,6 +106,7 @@ async function openAnalyzer(autoSync = false) {
 }
 
 async function connectEtsy() {
+  await persistSettings(true);
   const response = await sendMessage({ type: "OPEN_CONNECT" });
   if (response?.ok) {
     setStatus("Opened Etsy OAuth in a new tab.", "good");
@@ -86,8 +116,11 @@ async function connectEtsy() {
 }
 
 $("saveBtn").addEventListener("click", saveSettings);
+$("healthBtn").addEventListener("click", checkConnectorHealth);
 $("connectBtn").addEventListener("click", connectEtsy);
 $("openAnalyzerBtn").addEventListener("click", () => openAnalyzer(false));
 $("openAutoBtn").addEventListener("click", () => openAnalyzer(true));
 
-loadSettings();
+loadSettings().then(() => {
+  checkConnectorHealth();
+});

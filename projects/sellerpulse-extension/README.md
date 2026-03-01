@@ -35,7 +35,18 @@ Use SellerPulse directly on Etsy pages.
 - In extension popup, set connector URL (default `http://localhost:8787`)
 - Optionally set default shop ID
 
+## Package for Chrome Web Store
+
+```bash
+cd projects/sellerpulse-extension
+./package-extension.sh
+```
+
+Zip output is created in `dist/`.
+
 ## Notes
 
 - This extension is a UX layer. Real data comes from official Etsy API via connector.
 - Avoid scraping private Etsy pages; use OAuth + API flow.
+- Privacy policy draft: `PRIVACY_POLICY.md`
+- Store listing draft: `STORE_LISTING.md`
