@@ -6,7 +6,7 @@ _Learn about the person you're helping. Update this as you go._
 - **What to call them:** Brad
 - **Pronouns:** _(optional)_
 - **Timezone:** America/Detroit
-- **Notes:** Wants to build passive income on the internet; prefers business-minded, money-making focus.
+- **Notes:** Wants to build passive income on the internet; prefers business-minded, money-making focus. Has an existing Etsy store. Wants clawbot to do as much execution as possible with minimal effort on their side.
 
 ## Context
 
