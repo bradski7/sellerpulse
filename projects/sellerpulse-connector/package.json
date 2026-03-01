@@ -1,0 +1,15 @@
+{
+  "name": "sellerpulse-connector",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Etsy API OAuth + sync service for SellerPulse",
+  "scripts": {
+    "dev": "node src/server.mjs",
+    "start": "node src/server.mjs"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}

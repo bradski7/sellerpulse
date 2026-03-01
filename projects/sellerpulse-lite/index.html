@@ -70,6 +70,34 @@
         </div>
       </section>
 
+      <section class="card tools">
+        <h2>Live Etsy Sync (Beta)</h2>
+        <p class="muted">
+          Use official Etsy OAuth + API connector. No scraping. Start locally with the connector service.
+        </p>
+        <div class="grid">
+          <label>
+            Connector URL
+            <input id="connectorBaseUrl" type="text" value="http://localhost:8787" />
+          </label>
+          <label>
+            Shop ID
+            <input id="shopIdInput" type="number" min="1" placeholder="12345678" />
+          </label>
+          <label>
+            Period (days)
+            <input id="syncDaysInput" type="number" min="7" max="365" value="30" />
+          </label>
+        </div>
+        <div class="actions">
+          <button id="connectEtsyBtn">Connect Etsy</button>
+          <button id="syncLiveBtn" class="primary">Sync Live Data</button>
+        </div>
+        <p id="liveSyncStatus" class="form-status muted">
+          Need connector? See <code>projects/sellerpulse-connector/README.md</code>
+        </p>
+      </section>
+
       <section class="card" id="results" hidden>
         <h2>KPI Snapshot</h2>
         <div class="kpis" id="kpiGrid"></div>

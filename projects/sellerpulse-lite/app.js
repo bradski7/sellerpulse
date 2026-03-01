@@ -33,14 +33,19 @@ function metricBarClass(cls) {
   return "bad-bg";
 }
 
+function toNumber(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : 0;
+}
+
 function getInputs() {
   return {
-    views: Number($("views").value || 0),
-    orders: Number($("orders").value || 0),
-    revenue: Number($("revenue").value || 0),
-    adSpend: Number($("adSpend").value || 0),
-    favorites: Number($("favorites").value || 0),
-    multiOrders: Number($("multiOrders").value || 0),
+    views: toNumber($("views")?.value),
+    orders: toNumber($("orders")?.value),
+    revenue: toNumber($("revenue")?.value),
+    adSpend: toNumber($("adSpend")?.value),
+    favorites: toNumber($("favorites")?.value),
+    multiOrders: toNumber($("multiOrders")?.value),
   };
 }
 
@@ -124,39 +129,16 @@ function render(metrics, actions) {
   const { cvr, aov, roas, favRate, attachRate, score } = metrics;
 
   const metricCards = [
-    {
-      label: "Conversion Rate",
-      value: pct(cvr),
-      cls: metricClass(cvr, 0.03, 0.02),
-      bar: clampPercent(cvr, 0.04),
-    },
-    {
-      label: "AOV",
-      value: money(aov),
-      cls: metricClass(aov, 30, 20),
-      bar: clampPercent(aov, 40),
-    },
-    {
-      label: "ROAS",
-      value: roas.toFixed(2),
-      cls: metricClass(roas, 2.5, 1.5),
-      bar: clampPercent(roas, 4),
-    },
-    {
-      label: "Favorite Rate",
-      value: pct(favRate),
-      cls: metricClass(favRate, 0.08, 0.05),
-      bar: clampPercent(favRate, 0.1),
-    },
-    {
-      label: "Attach Rate",
-      value: pct(attachRate),
-      cls: metricClass(attachRate, 0.2, 0.12),
-      bar: clampPercent(attachRate, 0.3),
-    },
+    { label: "Conversion Rate", value: pct(cvr), cls: metricClass(cvr, 0.03, 0.02), bar: clampPercent(cvr, 0.04) },
+    { label: "AOV", value: money(aov), cls: metricClass(aov, 30, 20), bar: clampPercent(aov, 40) },
+    { label: "ROAS", value: roas.toFixed(2), cls: metricClass(roas, 2.5, 1.5), bar: clampPercent(roas, 4) },
+    { label: "Favorite Rate", value: pct(favRate), cls: metricClass(favRate, 0.08, 0.05), bar: clampPercent(favRate, 0.1) },
+    { label: "Attach Rate", value: pct(attachRate), cls: metricClass(attachRate, 0.2, 0.12), bar: clampPercent(attachRate, 0.3) },
   ];
 
   const kpiGrid = $("kpiGrid");
+  if (!kpiGrid) return;
+
   kpiGrid.innerHTML = "";
   metricCards.forEach((m) => {
     const div = document.createElement("div");
@@ -171,18 +153,29 @@ function render(metrics, actions) {
   });
 
   const list = $("actionList");
-  list.innerHTML = "";
-  actions.forEach((a) => {
-    const li = document.createElement("li");
-    li.textContent = a;
-    list.appendChild(li);
-  });
+  if (list) {
+    list.innerHTML = "";
+    actions.forEach((a) => {
+      const li = document.createElement("li");
+      li.textContent = a;
+      list.appendChild(li);
+    });
+  }
 
-  $("summaryText").textContent = buildSummary(metrics);
-  $("score").textContent = score;
-  $("scorePill").hidden = false;
-  $("results").hidden = false;
-  $("recommendations").hidden = false;
+  const summary = $("summaryText");
+  if (summary) summary.textContent = buildSummary(metrics);
+
+  const scoreEl = $("score");
+  if (scoreEl) scoreEl.textContent = score;
+
+  const scorePill = $("scorePill");
+  if (scorePill) scorePill.hidden = false;
+
+  const results = $("results");
+  if (results) results.hidden = false;
+
+  const rec = $("recommendations");
+  if (rec) rec.hidden = false;
 }
 
 function analyze() {
@@ -233,12 +226,12 @@ function normalizeRow(row) {
 
   return {
     listing: pick(["listing", "sku", "title", "name"]) || "(unnamed)",
-    views: Number(pick(["views", "listingViews"])) || 0,
-    orders: Number(pick(["orders"])) || 0,
-    revenue: Number(pick(["revenue", "sales"])) || 0,
-    adSpend: Number(pick(["adSpend", "adspend", "ads"])) || 0,
-    favorites: Number(pick(["favorites", "favs"])) || 0,
-    multiOrders: Number(pick(["multiOrders", "orders2plus", "multi"])) || 0,
+    views: toNumber(pick(["views", "listingViews"])),
+    orders: toNumber(pick(["orders"])),
+    revenue: toNumber(pick(["revenue", "sales"])),
+    adSpend: toNumber(pick(["adSpend", "adspend", "ads"])),
+    favorites: toNumber(pick(["favorites", "favs"])),
+    multiOrders: toNumber(pick(["multiOrders", "orders2plus", "multi"])),
   };
 }
 
@@ -247,8 +240,63 @@ function setInputsFromRow(row) {
   setInputs(normalized);
 }
 
+function renderBatchFromRows(rows, sourceLabel = "Batch") {
+  const analyzed = rows.map((r) => {
+    const metrics = computeMetrics(r);
+    return { listing: r.listing || "(unnamed)", metrics };
+  });
+
+  if (!analyzed.length) return;
+
+  analyzed.sort((a, b) => b.metrics.score - a.metrics.score);
+
+  const avg = analyzed.reduce(
+    (acc, cur) => {
+      acc.cvr += cur.metrics.cvr;
+      acc.aov += cur.metrics.aov;
+      acc.roas += cur.metrics.roas;
+      acc.score += cur.metrics.score;
+      return acc;
+    },
+    { cvr: 0, aov: 0, roas: 0, score: 0 },
+  );
+
+  const n = analyzed.length;
+  avg.cvr /= n;
+  avg.aov /= n;
+  avg.roas /= n;
+  avg.score = Math.round(avg.score / n);
+
+  const top = analyzed.slice(0, 3).map((x) => x.listing).join(", ") || "n/a";
+  const low = analyzed.slice(-3).map((x) => x.listing).join(", ") || "n/a";
+
+  const batchSummary = $("batchSummary");
+  if (batchSummary) {
+    batchSummary.textContent = `${sourceLabel}: analyzed ${n} listings · Avg score ${avg.score}/100 · Avg CVR ${pct(avg.cvr)} · Avg AOV ${money(avg.aov)} · Avg ROAS ${avg.roas.toFixed(2)}. Top: ${top}. Needs work: ${low}.`;
+  }
+
+  const body = $("batchTableBody");
+  if (body) {
+    body.innerHTML = "";
+    analyzed.slice(0, 25).forEach((row) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${row.listing}</td>
+        <td>${row.metrics.score}</td>
+        <td>${pct(row.metrics.cvr)}</td>
+        <td>${money(row.metrics.aov)}</td>
+        <td>${row.metrics.roas.toFixed(2)}</td>
+      `;
+      body.appendChild(tr);
+    });
+  }
+
+  const batchResults = $("batchResults");
+  if (batchResults) batchResults.hidden = false;
+}
+
 async function loadCsvRow() {
-  const file = $("csvFile").files?.[0];
+  const file = $("csvFile")?.files?.[0];
   if (!file) {
     alert("Choose a CSV file first.");
     return;
@@ -265,7 +313,7 @@ async function loadCsvRow() {
 }
 
 async function batchAnalyzeCsv() {
-  const file = $("csvFile").files?.[0];
+  const file = $("csvFile")?.files?.[0];
   if (!file) {
     alert("Choose a CSV file first.");
     return;
@@ -274,56 +322,8 @@ async function batchAnalyzeCsv() {
   try {
     const text = await file.text();
     const rawRows = parseCsvRows(text);
-    const analyzed = rawRows.map((r) => {
-      const normalized = normalizeRow(r);
-      const metrics = computeMetrics(normalized);
-      return { listing: normalized.listing, metrics };
-    });
-
-    if (!analyzed.length) {
-      throw new Error("No data rows found.");
-    }
-
-    analyzed.sort((a, b) => b.metrics.score - a.metrics.score);
-
-    const avg = analyzed.reduce(
-      (acc, cur) => {
-        acc.cvr += cur.metrics.cvr;
-        acc.aov += cur.metrics.aov;
-        acc.roas += cur.metrics.roas;
-        acc.score += cur.metrics.score;
-        return acc;
-      },
-      { cvr: 0, aov: 0, roas: 0, score: 0 },
-    );
-
-    const n = analyzed.length;
-    avg.cvr /= n;
-    avg.aov /= n;
-    avg.roas /= n;
-    avg.score = Math.round(avg.score / n);
-
-    const top = analyzed.slice(0, 3).map((x) => x.listing).join(", ");
-    const low = analyzed.slice(-3).map((x) => x.listing).join(", ");
-
-    $("batchSummary").textContent = `Analyzed ${n} listings · Avg score ${avg.score}/100 · Avg CVR ${pct(avg.cvr)} · Avg AOV ${money(avg.aov)} · Avg ROAS ${avg.roas.toFixed(2)}. Top: ${top}. Needs work: ${low}.`;
-
-    const body = $("batchTableBody");
-    body.innerHTML = "";
-
-    analyzed.slice(0, 10).forEach((row) => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${row.listing}</td>
-        <td>${row.metrics.score}</td>
-        <td>${pct(row.metrics.cvr)}</td>
-        <td>${money(row.metrics.aov)}</td>
-        <td>${row.metrics.roas.toFixed(2)}</td>
-      `;
-      body.appendChild(tr);
-    });
-
-    $("batchResults").hidden = false;
+    const rows = rawRows.map(normalizeRow);
+    renderBatchFromRows(rows, "CSV");
   } catch (err) {
     alert(`Batch CSV error: ${err.message}`);
   }
@@ -420,20 +420,101 @@ async function copySummary() {
 }
 
 function applyScenario() {
-  const key = $("scenarioSelect").value;
+  const key = $("scenarioSelect")?.value;
   if (!key || !SCENARIOS[key]) return;
   setInputs(SCENARIOS[key]);
   analyze();
 }
 
-$("analyzeBtn").addEventListener("click", analyze);
-$("saveSnapshotBtn").addEventListener("click", saveSnapshot);
-$("loadSnapshotBtn").addEventListener("click", loadSnapshot);
-$("copySummaryBtn").addEventListener("click", copySummary);
-$("downloadPlanBtn").addEventListener("click", downloadPlan);
-$("loadCsvBtn").addEventListener("click", loadCsvRow);
-$("batchAnalyzeBtn").addEventListener("click", batchAnalyzeCsv);
-$("downloadCsvTemplateBtn").addEventListener("click", downloadCsvTemplate);
-$("scenarioSelect").addEventListener("change", applyScenario);
+function setLiveStatus(text, cls = "muted") {
+  const el = $("liveSyncStatus");
+  if (!el) return;
+  el.textContent = text;
+  el.className = `form-status ${cls}`;
+}
+
+function getConnectorConfig() {
+  const base = ($("connectorBaseUrl")?.value || "http://localhost:8787").trim().replace(/\/$/, "");
+  const shopId = ($("shopIdInput")?.value || "").trim();
+  const days = Number($("syncDaysInput")?.value || 30);
+  return { base, shopId, days };
+}
+
+function connectEtsy() {
+  const { base } = getConnectorConfig();
+  window.open(`${base}/auth/start`, "_blank", "noopener,noreferrer");
+  setLiveStatus("Opened Etsy OAuth. Complete connect, then click Sync Live Data.", "muted");
+}
+
+async function syncLiveData() {
+  const { base, shopId, days } = getConnectorConfig();
+  if (!shopId) {
+    setLiveStatus("Enter your Etsy Shop ID first.", "bad");
+    return;
+  }
+
+  setLiveStatus("Syncing live Etsy data…", "muted");
+
+  try {
+    const res = await fetch(`${base}/api/sync?shop_id=${encodeURIComponent(shopId)}&days=${encodeURIComponent(days)}`);
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data?.message || data?.error || `Sync failed (${res.status})`);
+    }
+
+    const listingViews = Number(data?.listing_summary?.total_views_daily_tabulated || 0);
+    const listingFavorers = Number(data?.listing_summary?.total_favorers || 0);
+    const orders = Number(data?.totals?.orders || 0);
+    const revenue = Number(data?.totals?.revenue || 0);
+
+    setInputs({
+      views: listingViews,
+      orders,
+      revenue,
+      adSpend: getInputs().adSpend,
+      favorites: listingFavorers,
+      multiOrders: getInputs().multiOrders,
+    });
+
+    analyze();
+
+    const rows = (data.listings || []).map((l) => ({
+      listing: l.title || `Listing ${l.listing_id}`,
+      views: Number(l.views || 0),
+      orders: Number(l.orders_30d || 0),
+      revenue: Number(l.revenue_30d || 0),
+      adSpend: 0,
+      favorites: Number(l.num_favorers || 0),
+      multiOrders: 0,
+    }));
+
+    if (rows.length) {
+      renderBatchFromRows(rows, "Live Etsy");
+    }
+
+    setLiveStatus(`Sync complete. Loaded ${rows.length} listings from shop ${shopId}.`, "good");
+  } catch (err) {
+    setLiveStatus(`Live sync failed: ${err.message}`, "bad");
+  }
+}
+
+function bindIfPresent(id, event, handler) {
+  const el = $(id);
+  if (!el) return;
+  el.addEventListener(event, handler);
+}
+
+bindIfPresent("analyzeBtn", "click", analyze);
+bindIfPresent("saveSnapshotBtn", "click", saveSnapshot);
+bindIfPresent("loadSnapshotBtn", "click", loadSnapshot);
+bindIfPresent("copySummaryBtn", "click", copySummary);
+bindIfPresent("downloadPlanBtn", "click", downloadPlan);
+bindIfPresent("loadCsvBtn", "click", loadCsvRow);
+bindIfPresent("batchAnalyzeBtn", "click", batchAnalyzeCsv);
+bindIfPresent("downloadCsvTemplateBtn", "click", downloadCsvTemplate);
+bindIfPresent("scenarioSelect", "change", applyScenario);
+bindIfPresent("connectEtsyBtn", "click", connectEtsy);
+bindIfPresent("syncLiveBtn", "click", syncLiveData);
 
 analyze();
